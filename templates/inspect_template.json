@@ -1,0 +1,21 @@
+{
+  "inspectTemplate": {
+    "displayName": "Freetext PII inspect",
+    "description": "Detects common PII infoTypes in unstructured freetext columns.",
+    "inspectConfig": {
+      "infoTypes": [
+        { "name": "PERSON_NAME" },
+        { "name": "EMAIL_ADDRESS" },
+        { "name": "PHONE_NUMBER" },
+        { "name": "US_SOCIAL_SECURITY_NUMBER" },
+        { "name": "CREDIT_CARD_NUMBER" },
+        { "name": "DATE_OF_BIRTH" },
+        { "name": "STREET_ADDRESS" }
+      ],
+      "minLikelihood": "POSSIBLE",
+      "limits": {
+        "maxFindingsPerRequest": 0
+      }
+    }
+  }
+}

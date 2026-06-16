@@ -1,0 +1,3 @@
+google-cloud-bigquery>=3.25.0
+google-cloud-dlp>=3.22.0
+google-api-core>=2.19.0

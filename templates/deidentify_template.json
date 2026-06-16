@@ -1,0 +1,26 @@
+{
+  "deidentifyTemplate": {
+    "displayName": "Freetext PII masker",
+    "description": "Replaces detected PII in freetext with infoType placeholders.",
+    "deidentifyConfig": {
+      "infoTypeTransformations": {
+        "transformations": [
+          {
+            "infoTypes": [
+              { "name": "PERSON_NAME" },
+              { "name": "EMAIL_ADDRESS" },
+              { "name": "PHONE_NUMBER" },
+              { "name": "US_SOCIAL_SECURITY_NUMBER" },
+              { "name": "CREDIT_CARD_NUMBER" },
+              { "name": "DATE_OF_BIRTH" },
+              { "name": "STREET_ADDRESS" }
+            ],
+            "primitiveTransformation": {
+              "replaceWithInfoTypeConfig": {}
+            }
+          }
+        ]
+      }
+    }
+  }
+}

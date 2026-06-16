@@ -1,0 +1,43 @@
+substitutions:
+  _REGION: us-central1
+  _JOB_NAME: sdp-bq-masker
+  _IMAGE: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/sdp-pipeline/sdp-bq-masker
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_IMAGE}:${SHORT_SHA}
+      - -t
+      - ${_IMAGE}:latest
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_IMAGE}:${SHORT_SHA}
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_IMAGE}:latest
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - jobs
+      - deploy
+      - ${_JOB_NAME}
+      - --image=${_IMAGE}:${SHORT_SHA}
+      - --region=${_REGION}
+      - --service-account=sdp-bq-masker@${PROJECT_ID}.iam.gserviceaccount.com
+      - --max-retries=1
+      - --task-timeout=3600s
+      - --memory=1Gi
+      - --cpu=1
+
+images:
+  - ${_IMAGE}:${SHORT_SHA}
+  - ${_IMAGE}:latest
