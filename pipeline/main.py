@@ -1,5 +1,6 @@
 import logging
 import sys
+from typing import Optional
 
 from config import PipelineConfig
 from bq_io import BigQueryIO
@@ -18,19 +19,29 @@ def mask_batch(
     dlp: DlpClient,
     deidentify_template: str,
     inspect_template: str,
+    dlp_chunk_size: int,
 ) -> list[dict]:
-    masked_rows = []
-    for row in rows:
-        masked = dict(row)
+    masked_rows = [dict(row) for row in rows]
+    texts: list[Optional[str]] = []
+    positions: list[tuple[int, str]] = []
+
+    for row_index, row in enumerate(masked_rows):
         for column in freetext_columns:
-            if column not in masked:
+            if column not in row:
                 raise KeyError(f"Column '{column}' not found in source row")
-            masked[column] = dlp.deidentify(
-                masked[column],
-                deidentify_template=deidentify_template,
-                inspect_template=inspect_template,
-            )
-        masked_rows.append(masked)
+            texts.append(row[column])
+            positions.append((row_index, column))
+
+    masked_texts = dlp.deidentify_batch(
+        texts,
+        deidentify_template=deidentify_template,
+        inspect_template=inspect_template,
+        chunk_size=dlp_chunk_size,
+    )
+
+    for (row_index, column), masked_text in zip(positions, masked_texts):
+        masked_rows[row_index][column] = masked_text
+
     return masked_rows
 
 
@@ -51,6 +62,7 @@ def run(config: PipelineConfig) -> None:
             dlp,
             config.deidentify_template,
             config.inspect_template,
+            config.dlp_chunk_size,
         )
         for row in masked[:3]:
             logger.info("Sample masked row: %s", row)
@@ -66,6 +78,7 @@ def run(config: PipelineConfig) -> None:
             dlp,
             config.deidentify_template,
             config.inspect_template,
+            config.dlp_chunk_size,
         )
         bq.write_batch(config.target_table, masked)
         total_rows += len(masked)
