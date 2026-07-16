@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
+# DEPRECATED: Prefer Terraform for DLP templates:
+#   cd terraform && terraform apply
+#   terraform output -raw inspect_template
+#   terraform output -raw deidentify_template
+# This script always POSTs new templates (not idempotent). Retained as a fallback.
 set -euo pipefail
+
+echo "WARNING: scripts/create_templates.sh is deprecated; use terraform/ instead." >&2
 
 PROJECT_ID="${PROJECT_ID:?Set PROJECT_ID}"
 DLP_LOCATION="${DLP_LOCATION:-global}"

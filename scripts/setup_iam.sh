@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
+# DEPRECATED: Prefer Terraform for infrastructure setup:
+#   cd terraform && cp terraform.tfvars.example terraform.tfvars && terraform init && terraform apply
+# This script is retained as a temporary non-Terraform fallback.
 set -euo pipefail
+
+echo "WARNING: scripts/setup_iam.sh is deprecated; use terraform/ instead." >&2
 
 PROJECT_ID="${PROJECT_ID:?Set PROJECT_ID}"
 REGION="${REGION:-us-central1}"

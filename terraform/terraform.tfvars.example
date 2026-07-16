@@ -1,0 +1,11 @@
+project_id = "your-gcp-project-id"
+
+# Optional overrides:
+# region              = "us-central1"
+# dlp_location        = "global"
+# dataset_id          = "sdp_test"
+# dataset_location    = "US"
+# job_name            = "sdp-bq-masker"
+# service_account_id  = "sdp-bq-masker"
+# artifact_registry_repo = "sdp-pipeline"
+# image               = "us-central1-docker.pkg.dev/your-gcp-project-id/sdp-pipeline/sdp-bq-masker:latest"

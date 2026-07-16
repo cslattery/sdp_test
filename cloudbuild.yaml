@@ -1,3 +1,5 @@
+# Builds and pushes the pipeline image, then refreshes the Cloud Run Job image.
+# Job definition (env, SA, resources) is owned by Terraform (terraform/).
 substitutions:
   _REGION: us-central1
   _JOB_NAME: sdp-bq-masker
@@ -23,20 +25,17 @@ steps:
       - push
       - ${_IMAGE}:latest
 
+  # Image-only update; Terraform owns the rest of the job config.
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args:
       - run
       - jobs
-      - deploy
+      - update
       - ${_JOB_NAME}
       - --image=${_IMAGE}:${SHORT_SHA}
       - --region=${_REGION}
-      - --service-account=sdp-bq-masker@${PROJECT_ID}.iam.gserviceaccount.com
-      - --max-retries=1
-      - --task-timeout=3600s
-      - --memory=1Gi
-      - --cpu=1
+      - --project=${PROJECT_ID}
 
 images:
   - ${_IMAGE}:${SHORT_SHA}
