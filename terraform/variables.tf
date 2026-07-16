@@ -46,7 +46,7 @@ variable "artifact_registry_repo" {
 }
 
 variable "image" {
-  description = "Container image for the Cloud Run Job. Defaults to the Artifact Registry :latest image."
+  description = "Container image for the Cloud Run Job. Defaults to a public Cloud Run bootstrap image so apply succeeds before the first Cloud Build; set explicitly to force a specific image."
   type        = string
   default     = null
 }

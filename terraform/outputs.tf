@@ -15,12 +15,13 @@ output "service_account_email" {
 
 output "inspect_template" {
   description = "DLP inspect template resource name (INSPECT_TEMPLATE)."
-  value       = google_data_loss_prevention_inspect_template.freetext.name
+  # .id is the full resource path; .name may be only the template_id.
+  value       = google_data_loss_prevention_inspect_template.freetext.id
 }
 
 output "deidentify_template" {
   description = "DLP deidentify template resource name (DEIDENTIFY_TEMPLATE)."
-  value       = google_data_loss_prevention_deidentify_template.freetext.name
+  value       = google_data_loss_prevention_deidentify_template.freetext.id
 }
 
 output "dataset_id" {
@@ -49,8 +50,13 @@ output "artifact_registry_repo" {
 }
 
 output "image" {
-  description = "Container image used by the Cloud Run Job (may be ignored after first Cloud Build)."
+  description = "Bootstrap image on first apply (or var.image). Cloud Build replaces this with pipeline_image."
   value       = local.image
+}
+
+output "pipeline_image" {
+  description = "Target Artifact Registry image for the masking pipeline."
+  value       = local.pipeline_image
 }
 
 output "job_name" {
@@ -67,8 +73,8 @@ output "run_job_env" {
     export SOURCE_TABLE='${local.default_source_table}'
     export TARGET_TABLE='${local.default_target_table}'
     export FREETEXT_COLUMNS='notes'
-    export INSPECT_TEMPLATE='${google_data_loss_prevention_inspect_template.freetext.name}'
-    export DEIDENTIFY_TEMPLATE='${google_data_loss_prevention_deidentify_template.freetext.name}'
+    export INSPECT_TEMPLATE='${google_data_loss_prevention_inspect_template.freetext.id}'
+    export DEIDENTIFY_TEMPLATE='${google_data_loss_prevention_deidentify_template.freetext.id}'
     export DLP_LOCATION='${var.dlp_location}'
   EOT
 }

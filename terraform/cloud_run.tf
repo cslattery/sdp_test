@@ -38,11 +38,11 @@ resource "google_cloud_run_v2_job" "masker" {
         }
         env {
           name  = "INSPECT_TEMPLATE"
-          value = google_data_loss_prevention_inspect_template.freetext.name
+          value = google_data_loss_prevention_inspect_template.freetext.id
         }
         env {
           name  = "DEIDENTIFY_TEMPLATE"
-          value = google_data_loss_prevention_deidentify_template.freetext.name
+          value = google_data_loss_prevention_deidentify_template.freetext.id
         }
         env {
           name  = "BATCH_SIZE"

@@ -1,7 +1,6 @@
 -- Multi-freetext-column sample table.
 -- FREETEXT_COLUMNS=subject,body,internal_notes
--- Synthetic PII only.
-CREATE OR REPLACE TABLE `${project_id}.${dataset_id}.test_support_tickets` AS
+-- Synthetic PII only. Loaded via google_bigquery_job destination_table.
 SELECT
   1001 AS ticket_id,
   'Cannot login — email Jane Roe at jane.roe@example.org' AS subject,
@@ -35,4 +34,4 @@ SELECT
   'General feedback',
   'The dashboard is fast and easy to use.',
   CAST(NULL AS STRING),
-  'low';
+  'low'

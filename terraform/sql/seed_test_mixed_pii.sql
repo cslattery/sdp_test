@@ -1,7 +1,6 @@
 -- Mixed PII coverage table: one row class per major infoType plus controls.
 -- FREETEXT_COLUMNS=content
--- Synthetic PII only.
-CREATE OR REPLACE TABLE `${project_id}.${dataset_id}.test_mixed_pii` AS
+-- Synthetic PII only. Loaded via google_bigquery_job destination_table.
 SELECT 1 AS id, 'person_name' AS record_type, 'The account owner is Michael Chen.' AS content
 UNION ALL
 SELECT 2, 'email', 'Primary contact: support.user@example.com'
@@ -22,4 +21,4 @@ SELECT 9, 'clean', 'Inventory count completed for warehouse zone B with no issue
 UNION ALL
 SELECT 10, 'null_content', CAST(NULL AS STRING)
 UNION ALL
-SELECT 11, 'empty_content', '';
+SELECT 11, 'empty_content', ''

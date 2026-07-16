@@ -1,29 +1,34 @@
 # Builds and pushes the pipeline image, then refreshes the Cloud Run Job image.
 # Job definition (env, SA, resources) is owned by Terraform (terraform/).
+#
+# Note: Cloud Build does not expand nested user substitutions (e.g. _IMAGE
+# cannot reference ${_REGION}). Use inline paths instead. Prefer $BUILD_ID
+# over $SHORT_SHA so local `gcloud builds submit` works without a git trigger.
 substitutions:
   _REGION: us-central1
   _JOB_NAME: sdp-bq-masker
-  _IMAGE: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/sdp-pipeline/sdp-bq-masker
+  _REPO: sdp-pipeline
+  _IMAGE_NAME: sdp-bq-masker
 
 steps:
   - name: gcr.io/cloud-builders/docker
     args:
       - build
       - -t
-      - ${_IMAGE}:${SHORT_SHA}
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE_NAME}:$BUILD_ID
       - -t
-      - ${_IMAGE}:latest
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE_NAME}:latest
       - .
 
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${_IMAGE}:${SHORT_SHA}
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE_NAME}:$BUILD_ID
 
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - ${_IMAGE}:latest
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE_NAME}:latest
 
   # Image-only update; Terraform owns the rest of the job config.
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk
@@ -33,10 +38,10 @@ steps:
       - jobs
       - update
       - ${_JOB_NAME}
-      - --image=${_IMAGE}:${SHORT_SHA}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE_NAME}:$BUILD_ID
       - --region=${_REGION}
-      - --project=${PROJECT_ID}
+      - --project=$PROJECT_ID
 
 images:
-  - ${_IMAGE}:${SHORT_SHA}
-  - ${_IMAGE}:latest
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE_NAME}:$BUILD_ID
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_IMAGE_NAME}:latest

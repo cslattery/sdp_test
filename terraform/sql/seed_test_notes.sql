@@ -1,6 +1,5 @@
 -- Simple single-freetext-column sample table for basic pipeline tests.
--- Synthetic PII only.
-CREATE OR REPLACE TABLE `${project_id}.${dataset_id}.test_notes` AS
+-- Synthetic PII only. Loaded via google_bigquery_job destination_table.
 SELECT 1 AS id, 'Contact John Doe at john@example.com or 555-123-4567' AS notes
 UNION ALL
 SELECT 2, 'SSN 123-45-6789, born 01/15/1985'
@@ -13,4 +12,4 @@ SELECT 5, 'Card on file ends with 4111-1111-1111-1111 — call (415) 555-0199'
 UNION ALL
 SELECT 6, CAST(NULL AS STRING)
 UNION ALL
-SELECT 7, '';
+SELECT 7, ''

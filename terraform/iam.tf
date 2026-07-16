@@ -14,9 +14,17 @@ resource "google_project_iam_member" "pipeline_job_user" {
   member  = "serviceAccount:${google_service_account.pipeline.email}"
 }
 
+# dlp.user: call inspect/deidentify APIs.
+# dlp.reader: get inspect/deidentify templates (dlp.inspectTemplates.get, etc.).
 resource "google_project_iam_member" "pipeline_dlp_user" {
   project = var.project_id
   role    = "roles/dlp.user"
+  member  = "serviceAccount:${google_service_account.pipeline.email}"
+}
+
+resource "google_project_iam_member" "pipeline_dlp_reader" {
+  project = var.project_id
+  role    = "roles/dlp.reader"
   member  = "serviceAccount:${google_service_account.pipeline.email}"
 }
 

@@ -1,0 +1,16 @@
+# Keep Cloud Build source uploads small.
+.git/
+.terraform/
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/venv/
+**/.env
+**/*.tfstate
+**/*.tfstate.*
+**/.terraform/
+terraform/.terraform/
+*.egg-info/
+dist/
+build/
+.DS_Store

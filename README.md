@@ -22,7 +22,8 @@ All durable GCP resources are managed under `terraform/`:
 | Cloud Run Job | `sdp-bq-masker` (definition owned by Terraform) |
 
 ```bash
-export PROJECT_ID=your-project-id
+export PROJECT_ID=smathr-dev
+export REGION="us-central1"
 
 cd terraform
 cp terraform.tfvars.example terraform.tfvars

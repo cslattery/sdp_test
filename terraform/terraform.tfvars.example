@@ -1,4 +1,4 @@
-project_id = "your-gcp-project-id"
+project_id = "smathr-dev"
 
 # Optional overrides:
 # region              = "us-central1"
@@ -8,4 +8,4 @@ project_id = "your-gcp-project-id"
 # job_name            = "sdp-bq-masker"
 # service_account_id  = "sdp-bq-masker"
 # artifact_registry_repo = "sdp-pipeline"
-# image               = "us-central1-docker.pkg.dev/your-gcp-project-id/sdp-pipeline/sdp-bq-masker:latest"
+# image               = "us-central1-docker.pkg.dev/smathr-dev/sdp-pipeline/sdp-bq-masker:latest"
